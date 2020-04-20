@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -13,7 +14,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
+import java.util.*;
 
 // Declaring a WebServlet called StarsServlet, which maps to url "/api/stars"
 @WebServlet(name = "StarsServlet", urlPatterns = "/api/stars")
@@ -21,7 +22,7 @@ public class StarsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedbexample")
+    @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
     /**
@@ -41,7 +42,16 @@ public class StarsServlet extends HttpServlet {
             // Declare our statement
             Statement statement = dbcon.createStatement();
 
-            String query = "SELECT * from stars";
+            String query = "SELECT g.*, ratings.rating FROM" +
+                    "( SELECT movies.*, group_concat(DISTINCT genres.name) as genrename, group_concat(DISTINCT stars.name) as starsname, group_concat(DISTINCT stars.id) as starsid FROM movies " +
+                    "JOIN genres_in_movies ON genres_in_movies.movieId = movies.id " +
+                    "JOIN genres ON genres_in_movies.genreId = genres.id " +
+                    "JOIN stars_in_movies ON stars_in_movies.movieId = movies.id " +
+                    "JOIN stars ON stars.id = stars_in_movies.starId\n" +
+                    "GROUP BY(movies.id) ) AS g " +
+                    "JOIN ratings ON ratings.movieId = g.id " +
+                    "ORDER BY rating DESC " +
+                    "LIMIT 20";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -49,17 +59,34 @@ public class StarsServlet extends HttpServlet {
             JsonArray jsonArray = new JsonArray();
 
             // Iterate through each row of rs
+
             while (rs.next()) {
-                String star_id = rs.getString("id");
-                String star_name = rs.getString("name");
-                String star_dob = rs.getString("birthYear");
+                String movie_id = rs.getString("id");
+                String movie_title = rs.getString("tite");
+                String movie_year = rs.getString("year");
+                String movie_director = rs.getString("director");
+                String movie_rating = rs.getString("rating");
+                String movie_genre = rs.getString("genrename");
+                String[] movie_stars = rs.getString("starsname").split(",");
+                String[] movie_starsid = rs.getString("starsid").split(",");
+
+                List<starsObj> starsObjList = new ArrayList<>();
+                for (int i = 0; i < 3 ; i++) {
+                    starsObjList.add(new starsObj(movie_stars[i], movie_starsid[i]));
+                }
+
+                Gson gson = new Gson();
+                String star_json = gson.toJson(starsObjList);
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("star_id", star_id);
-                jsonObject.addProperty("star_name", star_name);
-                jsonObject.addProperty("star_dob", star_dob);
-
+                jsonObject.addProperty("movie_id", movie_id);
+                jsonObject.addProperty("movie_title", movie_title);
+                jsonObject.addProperty("movie_year", movie_year);
+                jsonObject.addProperty("movie_director", movie_director);
+                jsonObject.addProperty("movie_rating", movie_rating);
+                jsonObject.addProperty("movie_genre", movie_genre);
+                jsonObject.addProperty("movie_stars", star_json);
                 jsonArray.add(jsonObject);
             }
             
