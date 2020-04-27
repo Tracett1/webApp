@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Search Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        input[type=submit] {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Advance Search <span class="glyphicon glyphicon-search"></span></h1>
+    </div>
+
+    <p>Search by title, year, director, actor/actresses name or all:</p>
+    <form id="search_form" method="get" action="#">
+        <div class="form-group">
+            <label>Movie Title:</label>
+            <input name="title" placeholder="Enter Movie Title" type="text" class="form-control" >
+        </div>
+        <div class="form-group">
+            <label>Year:</label>
+            <input name="year" placeholder="Enter Movie Year Release" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Director:</label>
+            <input name="director" placeholder="Enter Movie Director" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Stars:</label>
+            <input name="stars" placeholder="Enter Star in Movie" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit Search" class="form-control">
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

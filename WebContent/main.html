@@ -25,14 +25,26 @@
 
 <div class="jumbotron text-center">
     <h1>Welcome to Fabflix!</h1>
-    <p>Browse Movies or Advance Search:</p>
+    <p>Browse Movies or Advance Search</p>
 </div>
 
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
-
-<div class = "container" id="genre_list">
-    <h2>Genres to Browse</h2>
-
+<div class = "row">
+    <div class = "column" style="background-color:#CD853F;">
+        <div class = "container" id="genre_list">
+            <h2>Browse By Genre!</h2>
+            <ul id="genre_list_body"></ul>
+        </div>
+    </div>
+    <div class = "column" style="background-color:#FFFACD;"> <!-- ADD THE SECOND COLUMN OF BROWSE BY -->
+        <div class = "container" id="alphanum_list">
+            <h2>Browse By First Character!</h2>
+            <ul id="alphanum_body"></ul>
+        </div>
+    </div>
+    <div class ="column text-center">
+        <p><a href='search.html'>Advanced Search</a></p>
+    </div>
 
 </div>
 <!-- Load jQuery and Bootstrap JS -->

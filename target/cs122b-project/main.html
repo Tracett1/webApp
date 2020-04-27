@@ -25,28 +25,28 @@
 
 <div class="jumbotron text-center">
     <h1>Welcome to Fabflix!</h1>
-    <p>Browse Movies or Advance Search:</p>
+    <p>Browse Movies or Advance Search</p>
 </div>
 
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
-<table id=star_table class="table table-striped">
-    <!-- Create a table header -->
-    <thead>
-    <tr>
-        <!-- Titles of each column-->
-        <th>movie title</th>
-        <th>year</th>
-        <th>director</th>
-        <th>rating</th>
-        <th>genres</th>
-        <th>stars</th>
-    </tr>
-    </thead>
-    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
-    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
-    <tbody id=star_table_body></tbody>
-</table>
+<div class = "row">
+    <div class = "column" style="background-color:#CD853F;">
+        <div class = "container" id="genre_list">
+            <h2>Browse By Genre!</h2>
+            <ul id="genre_list_body"></ul>
+        </div>
+    </div>
+    <div class = "column" style="background-color:#FFFACD;"> <!-- ADD THE SECOND COLUMN OF BROWSE BY -->
+        <div class = "container" id="alphanum_list">
+            <h2>Browse By First Character!</h2>
+            <ul id="alphanum_body"></ul>
+        </div>
+    </div>
+    <div class ="column text-center">
+        <p><a href='search.html'>Advanced Search</a></p>
+    </div>
 
+</div>
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

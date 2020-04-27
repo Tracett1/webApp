@@ -1,4 +1,4 @@
-import com.google.gson.Gson;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -14,11 +14,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "MainServlet", urlPatterns = "/api/single-movie")
+@WebServlet(name = "MainServlet", urlPatterns = "/api/main")
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -43,21 +41,10 @@ public class MainServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-            String query = "SELECT g.*, ratings.rating FROM" +
-                    "( SELECT movies.*, group_concat(DISTINCT genres.name) as genrename, group_concat(DISTINCT stars.name) as starsname, group_concat( DISTINCT stars.id) as starsid FROM movies " +
-                    "JOIN genres_in_movies ON genres_in_movies.movieId = movies.id " +
-                    "JOIN genres ON genres_in_movies.genreId = genres.id " +
-                    "JOIN stars_in_movies ON stars_in_movies.movieId = movies.id " +
-                    "JOIN stars ON stars.id = stars_in_movies.starId\n" +
-                    "GROUP BY(movies.id) ) AS g " +
-                    "JOIN ratings ON ratings.movieId = g.id " +
-                    "WHERE g.id = ?";
+            String query = "SELECT DISTINCT g.id, g.name FROM genres as g;";
+
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
-
-            // Set the parameter represented by "?" in the query to the id we get from url,
-            // num 1 indicates the first "?" in the query
-            statement.setString(1, id);
 
             // Perform the query
             ResultSet rs = statement.executeQuery();
@@ -67,33 +54,16 @@ public class MainServlet extends HttpServlet {
             // Iterate through each row of rs
             while (rs.next()) {
 
-                String movieId = rs.getString("id");
-                String movieTitle = rs.getString("tite");
-                String movieYear = rs.getString("year");
-                String movieDirector = rs.getString("director");
-                String movieRating = rs.getString("rating");
-                String movieGenre = rs.getString("genrename");
+                String genreId = rs.getString("id");
+                String genreName = rs.getString("name");
+
+
                 // Create a JsonObject based on the data we retrieve from rs
-                String[] movie_stars = rs.getString("starsname").split(",");
-                String[] movie_starsid = rs.getString("starsid").split(",");
-
-                List<starsObj> starsObjList = new ArrayList<>();
-                for (int i = 0; i < movie_stars.length ; i++) {
-                    starsObjList.add(new starsObj(movie_stars[i], movie_starsid[i]));
-                }
-
-                Gson gson = new Gson();
-                String star_json = gson.toJson(starsObjList);
 
                 JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("genre_id", genreId);
+                jsonObject.addProperty("genre_name", genreName);
 
-                jsonObject.addProperty("movie_id", movieId);
-                jsonObject.addProperty("movie_title", movieTitle);
-                jsonObject.addProperty("movie_year", movieYear);
-                jsonObject.addProperty("movie_director", movieDirector);
-                jsonObject.addProperty("movie_rating", movieRating);
-                jsonObject.addProperty("movie_genres", movieGenre);
-                jsonObject.addProperty("movie_stars", star_json);
                 jsonArray.add(jsonObject);
             }
 

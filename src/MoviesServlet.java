@@ -31,6 +31,11 @@ public class MoviesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json"); // Response mime type
+        //Check all parameters and filter appropriately
+
+
+
+
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
