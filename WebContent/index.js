@@ -16,7 +16,7 @@ function getParameterByName(target) {
 
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
-
+    console.log(url_to_pass);
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let starTableBodyElement = jQuery("#star_table_body");
@@ -60,21 +60,27 @@ function handleStarResult(resultData) {
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
-
 let browse_check = getParameterByName('browse'); //may be YES or NO
 let browse_genre = getParameterByName('genreId'); //may be not a parameter (empty)
 let browse_alphanum = getParameterByName('alphanum'); //may be not a parameter (empty)
-let search_check = getParameterByName('search');
 let url_to_pass = "";
-
 if (browse_check == "YES"){
-    url_to_pass = "genreId=" + browse_genre + "alphanum=" + browse_alphanum;
+    url_to_pass = "?browse=YES"+ "&genreId=" + browse_genre + "&alphanum=" + browse_alphanum;
+}
+
+else{
+    let title = getParameterByName('title');
+    let year = getParameterByName('year');
+    let director = getParameterByName('director');
+    let stars = getParameterByName('stars');
+    url_to_pass = "?browse=NO" +"&title=" + title + "&year=" + year + "&director=" + director + "&stars=" + stars;
+
 }
 
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/stars?" + url_to_pass, // Setting request url, which is mapped by MoviesServlet.java
+    url: "api/stars" + url_to_pass, // REMEMBER TO CHANGE BACK
     success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

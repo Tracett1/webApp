@@ -32,10 +32,63 @@ public class MoviesServlet extends HttpServlet {
 
         response.setContentType("application/json"); // Response mime type
         //Check all parameters and filter appropriately
+        String add_to_query = "";
+        String browse = request.getParameter("browse");
+        String genrename = request.getParameter("genreId");
+        String alphanum = request.getParameter("alphanum");
+        String title = request.getParameter("title");
+        String year = request.getParameter("year");
+        String director = request.getParameter("director");
+        String stars = request.getParameter("stars");
+        boolean searchForStars = false;
+        if ("YES".equals(browse)) {
+            if (genrename.equals("")) {
+                if (alphanum.equals("*")){
+                    add_to_query += "WHERE g.tite NOT REGEXP '^[a-zA-z0-9]'";
+                }
+                else {
+                    add_to_query += "WHERE g.tite LIKE" + "'" + alphanum + "%'";
+                }
+            }
+            else{
+                add_to_query = "HAVING FIND_IN_SET('" + genrename + "',genrename)";
+            }
+        }
+        else{ // this means that browse is not a parameter
+            //add_to_query = "WHERE g.year=" + year;
+            int count = 0;
+            add_to_query = "WHERE ";
+            if (!title.equals("")){
+                count = 1;
+                add_to_query += "g.tite LIKE '%" + title + "%'"; // OR g.tite LIKE " +"'%" + title + "%'"
+            }
 
+            if (!year.equals("")){ //first one in and its not empty
+                if(count == 0) {
+                    add_to_query += "g.year=" + year;
+                    count = 1;
+                }
+                else{
+                    add_to_query += "AND g.year=" + year;
+                }
+            }
 
+            if (!director.equals("")){
+                if (count ==0){
+                    add_to_query += "g.director LIKE '%" + director + "%'";
+                    count = 1;
 
+                }
+                else{
+                    add_to_query += "AND g.director LIKE '%" + director + "%'";
+                }
+            }
 
+            if (!stars.equals("")){
+                searchForStars = true;
+            }
+
+        }
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -47,6 +100,7 @@ public class MoviesServlet extends HttpServlet {
             // Declare our statement
             Statement statement = dbcon.createStatement();
 
+
             String query = "SELECT g.*, ratings.rating FROM" +
                     "( SELECT movies.*, group_concat(DISTINCT genres.name) as genrename, group_concat(DISTINCT stars.name) as starsname, group_concat(DISTINCT stars.id) as starsid FROM movies " +
                     "JOIN genres_in_movies ON genres_in_movies.movieId = movies.id " +
@@ -54,9 +108,11 @@ public class MoviesServlet extends HttpServlet {
                     "JOIN stars_in_movies ON stars_in_movies.movieId = movies.id " +
                     "JOIN stars ON stars.id = stars_in_movies.starId\n" +
                     "GROUP BY(movies.id) ) AS g " +
-                    "JOIN ratings ON ratings.movieId = g.id " +
-                    "ORDER BY rating DESC " +
-                    "LIMIT 20";
+                    "JOIN ratings ON ratings.movieId = g.id " + add_to_query +
+
+                    " LIMIT 20";
+
+
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -66,19 +122,54 @@ public class MoviesServlet extends HttpServlet {
             // Iterate through each row of rs
 
             while (rs.next()) {
+                //in case stars is a search
+                String[] movie_stars = rs.getString("starsname").split(",");
+                String[] movie_starsid = rs.getString("starsid").split(",");
+                List<starsObj> starsObjList = new ArrayList<>();
+
+                if (searchForStars){
+                    int found = 0;
+                    for (int j = 0 ; j < movie_stars.length; j++){
+                        if (movie_stars[j].toUpperCase().contains(stars.toUpperCase())){
+                            starsObjList.add(new starsObj(movie_stars[j], movie_starsid[j]));
+                            found = j;
+                            break;
+                        }
+                    }
+                    if (found != 0){ //found a match
+                        for (int l = 0 ; l < movie_stars.length ; l++){
+                            if (l != found){
+                                starsObjList.add(new starsObj(movie_stars[l], movie_starsid[l]));
+                            }
+                            if (starsObjList.size() == 3){
+                                break;
+                            }
+                        }
+                    }
+                    else{
+                        continue;
+                    }
+                }
+                // IF STARS ISN'T SEARCHED FOR
+                else{
+                    for (int i = 0; i < 3 ; i++){
+                        starsObjList.add(new starsObj(movie_stars[i], movie_starsid[i]));
+                    }
+                }
+
                 String movie_id = rs.getString("id");
                 String movie_title = rs.getString("tite");
                 String movie_year = rs.getString("year");
                 String movie_director = rs.getString("director");
                 String movie_rating = rs.getString("rating");
                 String movie_genre = rs.getString("genrename");
-                String[] movie_stars = rs.getString("starsname").split(",");
-                String[] movie_starsid = rs.getString("starsid").split(",");
-
-                List<starsObj> starsObjList = new ArrayList<>();
-                for (int i = 0; i < 3 ; i++) {
-                    starsObjList.add(new starsObj(movie_stars[i], movie_starsid[i]));
-                }
+                //String[] movie_stars = rs.getString("starsname").split(",");
+//                String[] movie_starsid = rs.getString("starsid").split(",");
+//
+//                List<starsObj> starsObjList = new ArrayList<>();
+//                for (int i = 0; i < 3 ; i++) {
+//                    starsObjList.add(new starsObj(movie_stars[i], movie_starsid[i]));
+//                }
 
                 Gson gson = new Gson();
                 String star_json = gson.toJson(starsObjList);
@@ -115,6 +206,7 @@ public class MoviesServlet extends HttpServlet {
 
         }
         out.close();
+
 
     }
 }

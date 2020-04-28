@@ -2,7 +2,7 @@ function handleMainResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
 
     let genreList = jQuery("#genre_list_body");
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".toUpperCase().split("");
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*".toUpperCase().split("");
     for (let i = 0; i < Math.min(30, resultData.length); i++){
         let rowHTML = "";
          rowHTML += "<li>" +
