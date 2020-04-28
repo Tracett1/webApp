@@ -24,6 +24,8 @@ function handleStarResult(resultData) {
     // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
+        var resultGenre = resultData[i]["movie_genre"].split(",");
+        console.log(resultGenre);
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
@@ -38,8 +40,14 @@ function handleStarResult(resultData) {
         rowHTML +="<td>" + resultData[i]["movie_year"] + "</td>";
         rowHTML +="<td>" + resultData[i]["movie_director"] + "</td>";
         rowHTML +="<td>" + resultData[i]["movie_rating"] + "</td>";
-        rowHTML +="<td>" + resultData[i]["movie_genre"] + "</td>";
-        // rowHTML +="<td>" + resultStar[0]["starname"] + "</td>";
+        // rowHTML +="<td>" + resultData[i]["movie_genre"] + "</td>";
+        rowHTML+= "<td>"
+        for (let j =0; j < resultGenre.length; j++){
+            rowHTML+= '<a href="index.html?browse=YES&alphanum=&genreId=' + resultGenre[j] + '">' +
+                resultGenre[j] + '</a>' + ", ";
+        }
+        rowHTML+="</td>";
+
         rowHTML +=
             "<th>" +
             // Add a link to single-movie.html with id passed with GET url parameter
