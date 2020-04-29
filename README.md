@@ -16,5 +16,8 @@ cs122b-spring20-team-182 created by GitHub Classroom
 * When browsing, characters are searched for using `LIKE [insert alphanumeric char]%`
 * Asteriks are queried for using `REGEXP '^[a-zA-z0-9]` regext statement in the sql query
 ### Contributions of Members: 
-Other than the help of online resources, class lectures and code examples, I've developed the Fabflix website on my own with 
+Other than the help of online resources, class lectures and code examples, I, Tracey Tran, have developed the Fabflix website on my own with 
 no other parter or contributions. 
+
+UCI EMAIL: tracett1@uci.edu
+STUDENT ID#: 45682491
