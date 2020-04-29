@@ -6,7 +6,7 @@ function handleMainResult(resultData) {
     for (let i = 0; i < Math.min(30, resultData.length); i++){
         let rowHTML = "";
          rowHTML += "<li>" +
-             '<a href="index.html?browse=YES&alphanum=&genreId=' + resultData[i]["genre_name"] + '">' +
+             '<a href="index.html?sortBy=tite&order=ASC&browse=YES&alphanum=&genreId=' + resultData[i]["genre_name"] + '">' +
              resultData[i]["genre_name"] + '</a>' + '</li>';
 /*        var tem = document.createElement('li');
         item.appendChild(document.createTextNode(resultData[i]["genre_name"]));
@@ -18,7 +18,7 @@ function handleMainResult(resultData) {
     for(let i =0; i < chars.length ; i++){
         let rowHTML = "";
         rowHTML += "<li>" +
-            '<a href="index.html?browse=YES&genreId=&alphanum=' + chars[i] + '">' +
+            '<a href="index.html?sortBy=tite&order=ASC&browse=YES&genreId=&alphanum=' + chars[i] + '">' +
             chars[i]+ '</a>' + '</li>';
         /*        var tem = document.createElement('li');
                 item.appendChild(document.createTextNode(resultData[i]["genre_name"]));

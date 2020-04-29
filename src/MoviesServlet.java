@@ -40,6 +40,16 @@ public class MoviesServlet extends HttpServlet {
         String year = request.getParameter("year");
         String director = request.getParameter("director");
         String stars = request.getParameter("stars");
+        String sortBy = request.getParameter("sortBy");
+        String order = request.getParameter("order");
+        String adding_opposite_sort;
+        if (sortBy.equals("rating")){
+            adding_opposite_sort = ", g.tite DESC";
+        }
+        else{
+            adding_opposite_sort = ", rating DESC";
+        }
+
         boolean searchForStars = false;
         if ("YES".equals(browse)) {
             if (genrename.equals("")) {
@@ -108,10 +118,10 @@ public class MoviesServlet extends HttpServlet {
                     "JOIN stars_in_movies ON stars_in_movies.movieId = movies.id " +
                     "JOIN stars ON stars.id = stars_in_movies.starId\n" +
                     "GROUP BY(movies.id) ) AS g " +
-                    "JOIN ratings ON ratings.movieId = g.id " + add_to_query +
-
+                    "JOIN ratings ON ratings.movieId = g.id " + add_to_query + "ORDER BY g." + sortBy + " " + order +
+                    adding_opposite_sort +
                     " LIMIT 20";
-
+            System.out.println("SQL QUERY BEING SENT: " + query);
 
 
             // Perform the query

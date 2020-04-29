@@ -23,7 +23,23 @@
 
 
 <h1>Movies</h1>
-
+<div class="container">
+    <p>Sort Moves by Rating or Title:</p>
+    <ul class="nav">
+        <li class="nav-item" style="text-decoration: underline;">
+            <a class="nav-link" href="#">Title ^</a>
+        </li>
+        <li class="nav-item" style="text-decoration: underline;">
+            <a class="nav-link" href="#">Title v</a>
+        </li>
+        <li class="nav-item" style="text-decoration: underline;">
+            <a class="nav-link" href="#">Rating ^</a>
+        </li>
+        <li class="nav-item" style="text-decoration: underline;">
+            <a class="nav-link" href="#">Rating v</a>
+        </li>
+    </ul>
+</div>
 
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=star_table class="table table-striped">
@@ -43,6 +59,22 @@
     <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
     <tbody id=star_table_body></tbody>
 </table>
+<div class="row">
+    <div class="col-8"></div>
+    <div class = "col-4">
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">
+                # displayed per page
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">10</a>
+                <a class="dropdown-item" href="#">25</a>
+                <a class="dropdown-item" href="#">50</a>
+                <a class="dropdown-item" href="#">100</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

@@ -1,3 +1,24 @@
+function updateURLParameter(url, param, paramVal){
+    var newAdditionalURL = "";
+    var tempArray = url.split("?");
+    var baseURL = tempArray[0];
+    var additionalURL = tempArray[1];
+    var temp = "";
+    if (additionalURL) {
+        tempArray = additionalURL.split("&");
+        for (var i=0; i<tempArray.length; i++){
+            if(tempArray[i].split('=')[0] != param){
+                newAdditionalURL += temp + tempArray[i];
+                temp = "&";
+            }
+        }
+    }
+
+    var rows_txt = temp + "" + param + "=" + paramVal;
+    return baseURL + "?" + newAdditionalURL + rows_txt;
+}
+
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -16,7 +37,6 @@ function getParameterByName(target) {
 
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
-    console.log(url_to_pass);
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let starTableBodyElement = jQuery("#star_table_body");
@@ -25,7 +45,6 @@ function handleStarResult(resultData) {
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
         var resultGenre = resultData[i]["movie_genre"].split(",");
-        console.log(resultGenre);
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
@@ -71,9 +90,11 @@ function handleStarResult(resultData) {
 let browse_check = getParameterByName('browse'); //may be YES or NO
 let browse_genre = getParameterByName('genreId'); //may be not a parameter (empty)
 let browse_alphanum = getParameterByName('alphanum'); //may be not a parameter (empty)
+let sortBy = getParameterByName('sortBy');
+let order = getParameterByName('order');
 let url_to_pass = "";
 if (browse_check == "YES"){
-    url_to_pass = "?browse=YES"+ "&genreId=" + browse_genre + "&alphanum=" + browse_alphanum;
+    url_to_pass = "?sortBy=" + sortBy + "&order="+ order + "&browse=YES"+ "&genreId=" + browse_genre + "&alphanum=" + browse_alphanum;
 }
 
 else{
@@ -81,7 +102,9 @@ else{
     let year = getParameterByName('year');
     let director = getParameterByName('director');
     let stars = getParameterByName('stars');
-    url_to_pass = "?browse=NO" +"&title=" + title + "&year=" + year + "&director=" + director + "&stars=" + stars;
+    let sortBy = getParameterByName('sortBy');
+    let order = getParameterByName('order');
+    url_to_pass = "?sortBy=" + sortBy + "&order="+ order +"&browse=NO" +"&title=" + title + "&year=" + year + "&director=" + director + "&stars=" + stars;
 
 }
 

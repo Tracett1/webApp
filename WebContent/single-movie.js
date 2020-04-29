@@ -57,6 +57,7 @@ function handleResult(resultData) {
     // Concatenate the html tags with resultData jsonObject to create table rows
    // for (let i = 0; i < Math.min(10, resultData.length); i++) {
     var resultStar = JSON.parse(resultData[0]["movie_stars"]);
+    var resultGenre = resultData[0]["movie_genres"].split(",");
     let rowHTML = "";
     rowHTML += "<tr>";
     rowHTML +=
@@ -68,7 +69,13 @@ function handleResult(resultData) {
         "</th>";
     rowHTML += "<th>" + resultData[0]["movie_year"] + "</th>";
     rowHTML += "<th>" + resultData[0]["movie_director"] + "</th>";
-    rowHTML += "<th>" + resultData[0]["movie_genres"] + "</th>";
+    //rowHTML += "<th>" + resultData[0]["movie_genres"] + "</th>";
+    rowHTML+= "<th>"
+    for (let j =0; j < resultGenre.length; j++){
+        rowHTML+= '<a href="index.html?sortBy=tite&order=ASC&browse=YES&alphanum=&genreId=' + resultGenre[j] + '">' +
+            resultGenre[j] + '</a>' + ", ";
+    }
+    rowHTML+="</th>";
     rowHTML += "<th>"
     for (let i = 0; i < Math.min(10, resultStar.length); i++){
         rowHTML +=
