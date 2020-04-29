@@ -1,5 +1,5 @@
 ### Demo URL: 
-
+https://youtu.be/4JEOfqiLuTA
 ### Deployment Instructions: 
 1. Clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182.git`
 2. Open IntelliJ -> Import Project -> Choose the project you just cloned (The root path must contain the pom.xml!) -> Choose Import project from external model -> choose Maven -> Click on Finish -> The IntelliJ will load automatically
