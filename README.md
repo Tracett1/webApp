@@ -1,6 +1,4 @@
-# cs122b-spring20-team-182
 ### Demo URL: 
-cs122b-spring20-team-182 created by GitHub Classroom
 
 ### Deployment Instructions: 
 1. Clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182.git`
