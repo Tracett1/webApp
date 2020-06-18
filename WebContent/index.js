@@ -1,3 +1,6 @@
+// INDEX.JS --> MOVIESERVLET
+// Index.js
+
 function updateURLParameter(url, param, paramVal){
     var newAdditionalURL = "";
     var tempArray = url.split("?");
@@ -18,6 +21,15 @@ function updateURLParameter(url, param, paramVal){
     return baseURL + "?" + newAdditionalURL + rows_txt;
 }
 
+// function updateParameter(url, param, paramVal){
+//     var search_params = url.searchParams;
+//     search_params.set(param,paramVal);
+//     url.search = search_params.toString();
+//
+//     var new_url = url.toString();
+//     return new_url;
+// }
+
 
 function getParameterByName(target) {
     // Get request URL
@@ -37,21 +49,15 @@ function getParameterByName(target) {
 
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
-    // Populate the star table
-    // Find the empty table body by id "star_table_body"
+    // Populates the movie list!
     let starTableBodyElement = jQuery("#star_table_body");
-
-    // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
         var resultGenre = resultData[i]["movie_genre"].split(",");
-        // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
-        // rowHTML +="<th>" + resultData[i]["movie_title"] + "</th>";
         rowHTML +=
             "<th>" +
-            // Add a link to single-movie.html with id passed with GET url parameter
             '<a href="single-movie.html?id=' + resultData[i]['movie_id'] + '">'
             + resultData[i]["movie_title"] +
             '</a>' +
@@ -59,17 +65,16 @@ function handleStarResult(resultData) {
         rowHTML +="<td>" + resultData[i]["movie_year"] + "</td>";
         rowHTML +="<td>" + resultData[i]["movie_director"] + "</td>";
         rowHTML +="<td>" + resultData[i]["movie_rating"] + "</td>";
-        // rowHTML +="<td>" + resultData[i]["movie_genre"] + "</td>";
         rowHTML+= "<td>"
         for (let j =0; j < resultGenre.length; j++){
-            rowHTML+= '<a href="index.html?browse=YES&alphanum=&genreId=' + resultGenre[j] + '">' +
+            rowHTML+= '<a href="index.html?sortBy=tite&order=ASC&browse=YES&alphanum=&genreId=' + resultGenre[j] + '">' +
                 resultGenre[j] + '</a>' + ", ";
         }
         rowHTML+="</td>";
 
         rowHTML +=
             "<th>" +
-            // Add a link to single-movie.html with id passed with GET url parameter
+
             '<a href="single-star.html?id=' + resultStar[0]['starid'] + '">'
             + resultStar[0]["starname"] +
             '</a>' + ", " + '<a href="single-star.html?id=' + resultStar[1]['starid'] + '">'
@@ -79,9 +84,36 @@ function handleStarResult(resultData) {
             "</th>";
         rowHTML += "</tr>";
 
-        // Append the row created to the table body, which will refresh the page
         starTableBodyElement.append(rowHTML);
     }
+
+
+    //POPULATING HYPERLINKS FOR SORTING
+    console.log("HI");
+    let sortingElement = jQuery("#sorting_nav_body");
+    let listHTML = "";
+    let url = window.location.href;
+    var newURL = updateURLParameter(url, "sortBy","tite");
+    newURL = updateURLParameter(newURL, "order", "ASC");
+    listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
+    listHTML+= '<a class="nav-link" href=' + newURL +">" + "Title Increasing" + "</a>";
+    listHTML+= "</li>";
+    newURL = updateURLParameter(newURL, "order", "DESC");
+    listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
+    listHTML+= '<a class="nav-link" href=' + newURL +'>' + "Title Dec" + "</a>";
+    listHTML+= "</li>";
+
+    newURL = updateURLParameter(url, "sortBy", "rating");
+    newURL = updateURLParameter(newURL, "order", "ASC");
+    listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
+    listHTML+= '<a class="nav-link" href=' + newURL +'>' + "Rating Inc" + "</a>";
+    listHTML+= "</li>";
+    newURL = updateURLParameter(newURL, "order","DESC");
+    listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
+    listHTML+= '<a class="nav-link" href=' + newURL +'>' + "Rating Dec" + "</a>";
+    listHTML+= "</li>";
+    sortingElement.append(listHTML);
+
 }
 
 /**

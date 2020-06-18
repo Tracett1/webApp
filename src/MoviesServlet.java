@@ -43,10 +43,13 @@ public class MoviesServlet extends HttpServlet {
         String sortBy = request.getParameter("sortBy");
         String order = request.getParameter("order");
         String adding_opposite_sort;
-        if (sortBy.equals("rating")){
+        if (sortBy.equals("rating")){ //If sorting by rating, title is descending
+            sortBy = "ORDER BY rating";
             adding_opposite_sort = ", g.tite DESC";
         }
-        else{
+        else{ //If sorting by title, rating is descending
+            String keep = sortBy;
+            sortBy = "ORDER BY g." + keep;
             adding_opposite_sort = ", rating DESC";
         }
 
@@ -64,7 +67,7 @@ public class MoviesServlet extends HttpServlet {
                 add_to_query = "HAVING FIND_IN_SET('" + genrename + "',genrename)";
             }
         }
-        else{ // this means that browse is not a parameter
+        else{ // this means that browse is not a parameter, we are SEARCHING
             //add_to_query = "WHERE g.year=" + year;
             int count = 0;
             add_to_query = "WHERE ";
@@ -118,7 +121,7 @@ public class MoviesServlet extends HttpServlet {
                     "JOIN stars_in_movies ON stars_in_movies.movieId = movies.id " +
                     "JOIN stars ON stars.id = stars_in_movies.starId\n" +
                     "GROUP BY(movies.id) ) AS g " +
-                    "JOIN ratings ON ratings.movieId = g.id " + add_to_query + "ORDER BY g." + sortBy + " " + order +
+                    "JOIN ratings ON ratings.movieId = g.id " + add_to_query + sortBy + " " + order +
                     adding_opposite_sort +
                     " LIMIT 20";
             System.out.println("SQL QUERY BEING SENT: " + query);

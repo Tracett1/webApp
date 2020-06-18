@@ -1,3 +1,4 @@
+//Main.js talks to MainServlet to get the "Result Data" that lists all the genres in DB
 function handleMainResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
 
@@ -8,9 +9,6 @@ function handleMainResult(resultData) {
          rowHTML += "<li>" +
              '<a href="index.html?sortBy=tite&order=ASC&browse=YES&alphanum=&genreId=' + resultData[i]["genre_name"] + '">' +
              resultData[i]["genre_name"] + '</a>' + '</li>';
-/*        var tem = document.createElement('li');
-        item.appendChild(document.createTextNode(resultData[i]["genre_name"]));
-        list.appendChild(item);*/
         genreList.append(rowHTML);
     }
 
@@ -20,18 +18,10 @@ function handleMainResult(resultData) {
         rowHTML += "<li>" +
             '<a href="index.html?sortBy=tite&order=ASC&browse=YES&genreId=&alphanum=' + chars[i] + '">' +
             chars[i]+ '</a>' + '</li>';
-        /*        var tem = document.createElement('li');
-                item.appendChild(document.createTextNode(resultData[i]["genre_name"]));
-                list.appendChild(item);*/
         alpha.append(rowHTML);
     }
 
-    //document.getElementById("genre_list_body").appendChild(list);
-
 }
-
-
-
 
 
 

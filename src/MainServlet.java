@@ -15,7 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-// Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
+// Servlet for querying for results on "Main Page". Page shows different ways to search/browse
 @WebServlet(name = "MainServlet", urlPatterns = "/api/main")
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
