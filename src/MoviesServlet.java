@@ -33,6 +33,8 @@ public class MoviesServlet extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
         //Check all parameters and filter appropriately
         String add_to_query = "";
+        String queryLimit = "";
+        String queryOffset = "";
         String browse = request.getParameter("browse");
         String genrename = request.getParameter("genreId");
         String alphanum = request.getParameter("alphanum");
@@ -42,6 +44,14 @@ public class MoviesServlet extends HttpServlet {
         String stars = request.getParameter("stars");
         String sortBy = request.getParameter("sortBy");
         String order = request.getParameter("order");
+        String numRecords = request.getParameter("numRecords");
+        if (numRecords != null){
+            queryLimit = numRecords;
+        }
+        else{
+            queryLimit = "10";
+        }
+
         String adding_opposite_sort;
         if (sortBy.equals("rating")){ //If sorting by rating, title is descending
             sortBy = "ORDER BY rating";
@@ -123,7 +133,7 @@ public class MoviesServlet extends HttpServlet {
                     "GROUP BY(movies.id) ) AS g " +
                     "JOIN ratings ON ratings.movieId = g.id " + add_to_query + sortBy + " " + order +
                     adding_opposite_sort +
-                    " LIMIT 20";
+                    " LIMIT " + queryLimit;
             System.out.println("SQL QUERY BEING SENT: " + query);
 
 

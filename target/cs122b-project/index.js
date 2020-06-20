@@ -1,6 +1,6 @@
 // INDEX.JS --> MOVIESERVLET
 // Index.js
-
+let limit = $("#limit_per_page");
 function updateURLParameter(url, param, paramVal){
     var newAdditionalURL = "";
     var tempArray = url.split("?");
@@ -21,14 +21,6 @@ function updateURLParameter(url, param, paramVal){
     return baseURL + "?" + newAdditionalURL + rows_txt;
 }
 
-// function updateParameter(url, param, paramVal){
-//     var search_params = url.searchParams;
-//     search_params.set(param,paramVal);
-//     url.search = search_params.toString();
-//
-//     var new_url = url.toString();
-//     return new_url;
-// }
 
 
 function getParameterByName(target) {
@@ -46,12 +38,29 @@ function getParameterByName(target) {
     // Return the decoded parameter value
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+// FUNCTION FOR DETERMINING PAGE # FOR PAGINATIONG
+// TAKES IN PAGE # and WHETHER "PREV" OR "NEXT" CHOSEN, RETURNS NEXT PAGE IN STRING FORM
+function getPrevNextIndex(pageParam, value){
+    var p = Number(pageParam);
+    if (value.equals("next")){
+        return (toString(p+1));
+    }
+    if (value.equals("prev") && p!= 1){
+        return toString(p-1);
+    }
+}
+
+function getOffset(pageParam, numRecords){
+    return (numRecords * pageParam);
+
+}
 
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
     // Populates the movie list!
+    document.getElementById("limit_per_page").value = numRecords;
     let starTableBodyElement = jQuery("#star_table_body");
-    for (let i = 0; i < Math.min(20, resultData.length); i++) {
+    for (let i = 0; i < resultData.length; i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
         var resultGenre = resultData[i]["movie_genre"].split(",");
         let rowHTML = "";
@@ -89,25 +98,9 @@ function handleStarResult(resultData) {
 
 
     //POPULATING HYPERLINKS FOR SORTING
-    console.log("HI");
+    console.log("Populating hyper-links for sorting by title or rating");
     let sortingElement = jQuery("#sorting_nav_body");
     let listHTML = "";
-    // listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
-    // listHTML+= '<a class="nav-link" href="index.html?sortBy=tite&order=ASC' + "&browse=" + browse_check + "&genreId=" + browse_genre +
-    //         "&alphanum=" + browse_alphanum + ">" + "Title Increasing" + "</a>";
-    // listHTML+= "</li>";
-    // listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
-    // listHTML+= '<a class="nav-link" href="index.html?sortBy=tite&order=DESC' + "&browse=" + browse_check + "&genreId=" + browse_genre +
-    //     "&alphanum=" + browse_alphanum + ">" + "Title Decreasing </a>";
-    // listHTML+= "</li>";
-    // listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
-    // listHTML+= '<a class="nav-link" href="index.html?sortBy=rating&order=ASC' + "&browse=" + browse_check + "&genreId=" + browse_genre +
-    //     "&alphanum=" + browse_alphanum + ">" + "Rating Increasing </a>";
-    // listHTML+= "</li>";
-    // listHTML+= "<li class='nav-item' style='text-decoration: underline;'>";
-    // listHTML+= '<a class="nav-link" href="index.html?sortBy=rating&order=DESC' + "&browse=" + browse_check + "&genreId=" + browse_genre +
-    //     "&alphanum=" + browse_alphanum + ">" + "Rating Decreasing </a>";
-    // listHTML+= "</li>";
     let url = window.location.href;
     var newURL = updateURLParameter(url, "sortBy","tite");
     newURL = updateURLParameter(newURL, "order", "ASC");
@@ -132,6 +125,13 @@ function handleStarResult(resultData) {
 
 }
 
+function handleOnChange(formChangeEvent){
+    formChangeEvent.preventDefault();
+    console.log(document.getElementById("limit_per_page").value);
+    newerURL = updateURLParameter(window.location.href, "numRecords", limit.val());
+    window.location.replace(newerURL);
+}
+
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
@@ -140,9 +140,13 @@ let browse_genre = getParameterByName('genreId'); //may be not a parameter (empt
 let browse_alphanum = getParameterByName('alphanum'); //may be not a parameter (empty)
 let sortBy = getParameterByName('sortBy');
 let order = getParameterByName('order');
+let numRecords = getParameterByName('numRecords');
+if (numRecords == null){
+    numRecords = '10';
+}
 let url_to_pass = "";
 if (browse_check == "YES"){
-    url_to_pass = "?sortBy=" + sortBy + "&order="+ order + "&browse=YES"+ "&genreId=" + browse_genre + "&alphanum=" + browse_alphanum;
+    url_to_pass = "?sortBy=" + sortBy + "&order="+ order + "&browse=YES"+ "&genreId=" + browse_genre + "&alphanum=" + browse_alphanum + "&numRecords=" + numRecords;
 }
 
 else{
@@ -152,7 +156,7 @@ else{
     let stars = getParameterByName('stars');
     let sortBy = getParameterByName('sortBy');
     let order = getParameterByName('order');
-    url_to_pass = "?sortBy=" + sortBy + "&order="+ order +"&browse=NO" +"&title=" + title + "&year=" + year + "&director=" + director + "&stars=" + stars;
+    url_to_pass = "?sortBy=" + sortBy + "&order="+ order +"&browse=NO" +"&title=" + title + "&year=" + year + "&director=" + director + "&stars=" + stars + "&numRecords=" + numRecords;
 
 }
 
@@ -160,6 +164,8 @@ else{
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/stars" + url_to_pass, // REMEMBER TO CHANGE BACK
+    url: "api/stars" + url_to_pass,
     success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
+
+limit.change(handleOnChange);
