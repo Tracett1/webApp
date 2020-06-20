@@ -41,12 +41,16 @@ function getParameterByName(target) {
 // FUNCTION FOR DETERMINING PAGE # FOR PAGINATIONG
 // TAKES IN PAGE # and WHETHER "PREV" OR "NEXT" CHOSEN, RETURNS NEXT PAGE IN STRING FORM
 function getPrevNextIndex(pageParam, value){
-    var p = Number(pageParam);
-    if (value.equals("next")){
-        return (toString(p+1));
+    var p = parseInt(pageParam);
+    if (value == "next"){
+        p = p+1;
+        console.log(p);
+        console.log(String(p));
+        return (String(p));
     }
-    if (value.equals("prev") && p!= 1){
-        return toString(p-1);
+    if (value == "prev"){
+        p = p-1;
+        return  String(p);
     }
 }
 
@@ -59,6 +63,8 @@ function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
     // Populates the movie list!
     document.getElementById("limit_per_page").value = numRecords;
+    // Displays current page #
+    document.getElementById("currPage").innerHTML = ("Current page #: " + pageNum);
     let starTableBodyElement = jQuery("#star_table_body");
     for (let i = 0; i < resultData.length; i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
@@ -123,6 +129,45 @@ function handleStarResult(resultData) {
     listHTML+= "</li>";
     sortingElement.append(listHTML);
 
+    // FILLING NEXT/PREV LINKS
+    var ul = document.getElementById("page_control");
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    var newPrev = getPrevNextIndex(pageNum,"prev");
+    var changeURL = updateURLParameter(window.location.href, "pageNum", newPrev);
+    a.setAttribute("href", changeURL);
+    a.setAttribute('class', 'page-link');
+    a.innerHTML = " << prev ";
+    if (pageNum == "1"){
+        li.setAttribute('class', 'page-item disabled');
+    }
+    else {
+        li.setAttribute('class', 'page-item');
+    }
+    li.appendChild(a);
+    ul.appendChild(li);
+
+    var li2 = document.createElement("li");
+    var a2 = document.createElement("a");
+    var newNext = getPrevNextIndex(pageNum, "next");
+
+    changeURL = updateURLParameter(window.location.href, "pageNum", newNext);
+    a2.setAttribute('href', changeURL);
+    a2.setAttribute('class', 'page-link');
+    a2.innerHTML = " next >> ";
+    if (numRecords < resultData.length){
+        li2.setAttribute('class', 'page-item disabled');
+    }
+    else{
+        li2.setAttribute('class', 'page-item');
+    }
+    li2.appendChild(a2);
+    ul.appendChild(li2);
+
+
+
+
+
 }
 
 function handleOnChange(formChangeEvent){
@@ -141,12 +186,14 @@ let browse_alphanum = getParameterByName('alphanum'); //may be not a parameter (
 let sortBy = getParameterByName('sortBy');
 let order = getParameterByName('order');
 let numRecords = getParameterByName('numRecords');
+let pageNum = getParameterByName('pageNum');
 if (numRecords == null){
     numRecords = '10';
 }
 let url_to_pass = "";
 if (browse_check == "YES"){
-    url_to_pass = "?sortBy=" + sortBy + "&order="+ order + "&browse=YES"+ "&genreId=" + browse_genre + "&alphanum=" + browse_alphanum + "&numRecords=" + numRecords;
+    url_to_pass = "?sortBy=" + sortBy + "&order="+ order + "&browse=YES"+ "&genreId=" + browse_genre + "&alphanum="
+        + browse_alphanum + "&numRecords=" + numRecords + "&pageNum=" + pageNum;
 }
 
 else{
@@ -156,7 +203,9 @@ else{
     let stars = getParameterByName('stars');
     let sortBy = getParameterByName('sortBy');
     let order = getParameterByName('order');
-    url_to_pass = "?sortBy=" + sortBy + "&order="+ order +"&browse=NO" +"&title=" + title + "&year=" + year + "&director=" + director + "&stars=" + stars + "&numRecords=" + numRecords;
+    url_to_pass = "?sortBy=" + sortBy + "&order="+ order +"&browse=NO" +"&title=" + title
+        + "&year=" + year + "&director=" + director + "&stars=" + stars + "&numRecords=" + numRecords +
+        "&pageNum=" + pageNum;
 
 }
 

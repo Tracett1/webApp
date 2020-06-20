@@ -34,7 +34,7 @@ public class MoviesServlet extends HttpServlet {
         //Check all parameters and filter appropriately
         String add_to_query = "";
         String queryLimit = "";
-        String queryOffset = "";
+        String queryOffset = "0";
         String browse = request.getParameter("browse");
         String genrename = request.getParameter("genreId");
         String alphanum = request.getParameter("alphanum");
@@ -45,12 +45,16 @@ public class MoviesServlet extends HttpServlet {
         String sortBy = request.getParameter("sortBy");
         String order = request.getParameter("order");
         String numRecords = request.getParameter("numRecords");
+        String pageNum = request.getParameter("pageNum");
+
         if (numRecords != null){
             queryLimit = numRecords;
         }
         else{
             queryLimit = "10";
         }
+
+        queryOffset = String.valueOf( (Integer.parseInt(pageNum) * Integer.parseInt(numRecords)) - Integer.parseInt(numRecords));
 
         String adding_opposite_sort;
         if (sortBy.equals("rating")){ //If sorting by rating, title is descending
@@ -88,11 +92,11 @@ public class MoviesServlet extends HttpServlet {
 
             if (!year.equals("")){ //first one in and its not empty
                 if(count == 0) {
-                    add_to_query += "g.year=" + year;
+                    add_to_query += "g.year=" + year + " ";
                     count = 1;
                 }
                 else{
-                    add_to_query += "AND g.year=" + year;
+                    add_to_query += "AND g.year=" + year + " ";
                 }
             }
 
@@ -133,7 +137,7 @@ public class MoviesServlet extends HttpServlet {
                     "GROUP BY(movies.id) ) AS g " +
                     "JOIN ratings ON ratings.movieId = g.id " + add_to_query + sortBy + " " + order +
                     adding_opposite_sort +
-                    " LIMIT " + queryLimit;
+                    " LIMIT " + queryLimit + " OFFSET " + queryOffset;
             System.out.println("SQL QUERY BEING SENT: " + query);
 
 
