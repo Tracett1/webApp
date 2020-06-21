@@ -32,7 +32,7 @@ function getParameterByName(target) {
     // Ues regular expression to find matched parameter value
     let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
-    if (!results) return null;
+    if (!results) return '';
     if (!results[2]) return '';
 
     // Return the decoded parameter value
@@ -44,8 +44,6 @@ function getPrevNextIndex(pageParam, value){
     var p = parseInt(pageParam);
     if (value == "next"){
         p = p+1;
-        console.log(p);
-        console.log(String(p));
         return (String(p));
     }
     if (value == "prev"){
@@ -152,6 +150,7 @@ function handleStarResult(resultData) {
     var newNext = getPrevNextIndex(pageNum, "next");
 
     changeURL = updateURLParameter(window.location.href, "pageNum", newNext);
+
     a2.setAttribute('href', changeURL);
     a2.setAttribute('class', 'page-link');
     a2.innerHTML = " next >> ";
@@ -187,6 +186,9 @@ let sortBy = getParameterByName('sortBy');
 let order = getParameterByName('order');
 let numRecords = getParameterByName('numRecords');
 let pageNum = getParameterByName('pageNum');
+if (numRecords == ""){
+    numRecords = '10';
+}
 if (numRecords == null){
     numRecords = '10';
 }

@@ -1,20 +1,5 @@
-/**
- * This example is following frontend and backend separation.
- *
- * Before this .js is loaded, the html skeleton is created.
- *
- * This .js performs three steps:
- *      1. Get parameter from request URL so it know which id to look for
- *      2. Use jQuery to talk to backend API to get the json data.
- *      3. Populate the data to correct html elements.
- */
+let button = $("#back_to_movies");
 
-
-/**
- * Retrieve parameter from request URL, matching by parameter name
- * @param target String
- * @returns {*}
- */
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -90,6 +75,20 @@ function handleResult(resultData) {
     // Append the row created to the table body, which will refresh the page
     movieTableBodyElement.append(rowHTML);
     //}
+}
+
+function handleRedirect(resultData){
+    window.location.replace(resultData);
+}
+
+
+function handleButtonClick(){
+    console.log("hitting handle button");
+    $.ajax("api/single-movie", {
+        method: "POST",
+        success: handleRedirect
+    });
+
 }
 
 /**

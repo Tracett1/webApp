@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +30,14 @@ public class MoviesServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //SAVING SESSION URL
+        HttpSession session = request.getSession();
+        String Uri = "?" + request.getQueryString();
+        System.out.println("this is uri");
+        System.out.println(Uri);
+        session.setAttribute("savedMoviePage", Uri);
+
+
 
         response.setContentType("application/json"); // Response mime type
         //Check all parameters and filter appropriately
@@ -46,14 +55,13 @@ public class MoviesServlet extends HttpServlet {
         String order = request.getParameter("order");
         String numRecords = request.getParameter("numRecords");
         String pageNum = request.getParameter("pageNum");
-
-        if (numRecords != null){
+        if (numRecords != null && !numRecords.equals("")){
             queryLimit = numRecords;
         }
         else{
             queryLimit = "10";
+            numRecords = "10";
         }
-
         queryOffset = String.valueOf( (Integer.parseInt(pageNum) * Integer.parseInt(numRecords)) - Integer.parseInt(numRecords));
 
         String adding_opposite_sort;
@@ -234,6 +242,10 @@ public class MoviesServlet extends HttpServlet {
         }
         out.close();
 
-
     }
+
+
+
+
+
 }

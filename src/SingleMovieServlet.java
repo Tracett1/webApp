@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -120,5 +121,17 @@ public class SingleMovieServlet extends HttpServlet {
         out.close();
 
     }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        HttpSession session = request.getSession();
+        String url = (String) session.getAttribute("savedMoviePage");
+        String sendBack = "index.html?" + url;
+        System.out.println("SENDING BACK");
+        System.out.println(sendBack);
+        response.getWriter().write(sendBack);
+        response.setStatus(200);
+
+    }
+
+
 
 }
