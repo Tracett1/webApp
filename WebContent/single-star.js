@@ -56,8 +56,19 @@ function handleResult(resultData) {
         movieTableBodyElement.append(rowHTML);
     }
 }
+function handleRedirect(resultData){
+    window.location.replace(resultData);
+}
 
-/**
+
+function handleButtonClick(){
+    console.log("hitting handle button");
+    $.ajax("api/single-movie", {
+        method: "POST",
+        success: handleRedirect
+    });
+
+}/**
  * Once this .js is loaded, following scripts will be executed by the browser\
  */
 
