@@ -52,8 +52,26 @@ function getPrevNextIndex(pageParam, value){
     }
 }
 
-function getOffset(pageParam, numRecords){
-    return (numRecords * pageParam);
+//handles the buttons
+function handleAddCart(value){
+    if (sessionStorage.getItem("cart") == null){
+        sessionStorage.setItem("cart", "{}");
+    }
+    var newval = value.split(",,,").join(" ");
+
+    var updateCart = JSON.parse(sessionStorage.getItem("cart"));
+    var cartSize = Object.keys(updateCart).length;
+    alert(newval + "added to cart!. You have" + cartSize.toString() + " movies in your cart.");
+    if (updateCart.hasOwnProperty(newval)){
+        updateCart[newval] +=1;
+    }
+    else{
+        updateCart[newval] = 1;
+    }
+    sessionStorage.setItem("cart", JSON.stringify(updateCart));
+
+    console.log("ADDED TO SESSION");
+    console.log(sessionStorage.cart);
 
 }
 
@@ -66,7 +84,7 @@ function handleStarResult(resultData) {
     let starTableBodyElement = jQuery("#star_table_body");
     for (let i = 0; i < resultData.length; i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
-        var resultGenre = resultData[i]["movie_genre"].split(",");
+        var resultGenre = resultData[i]["movie_genre"].split(",,,");
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML +=
@@ -95,6 +113,9 @@ function handleStarResult(resultData) {
             '</a>' + ", " + '<a href="single-star.html?id=' + resultStar[2]['starid'] + '">'
             + resultStar[2]["starname"] +
             "</th>";
+        rowHTML+= "<td>";
+        rowHTML+= "<button type='button' onclick='handleAddCart(this.value)' value=" + resultData[i]["movie_title"].split(" ").join(",,,")  +">" + "Click me </button>";
+        rowHTML+="</td>";
         rowHTML += "</tr>";
 
         starTableBodyElement.append(rowHTML);
