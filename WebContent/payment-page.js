@@ -20,13 +20,15 @@ function getTotalPrice(){
     return count;
 
 }
-function handlePaymentSub(){
-    console.log("TO SERVER");
+function handlePaymentSub(resultData){
+    console.log(resultData["errorMessage"]);
+    console.log("TO SERVER SUCCESSFUL");
 }
 function submitCCForm(formSubmit){
     formSubmit.preventDefault();
     // go to the next page if it is processed correctly!
-    jQuery.ajax(
+    console.log(cart_form.serialize());
+    $.ajax(
         "api/payment",{
             method: "POST",
             data: cart_form.serialize(),
