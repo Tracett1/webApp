@@ -60,21 +60,21 @@ function handleAddCart(value){
     var newval = value.split(",,,").join(" ");
 
     var updateCart = JSON.parse(sessionStorage.getItem("cart"));
-    var cartSize = Object.keys(updateCart).length;
     if (updateCart.hasOwnProperty(newval)){
         updateCart[newval] +=1;
     }
     else{
         updateCart[newval] = 1;
     }
-
+    var cartSize = Object.keys(updateCart).length;
     sessionStorage.setItem("cart", JSON.stringify(updateCart));
-    alert(newval + "added to cart!. You have " + cartSize.toString() + " movies in your cart.");
-    console.log("ADDED TO SESSION");
-    console.log(sessionStorage.cart);
+    alert("'"+ newval + "'" + " added to cart!. You have " + cartSize.toString() + " movies in your cart.");
+
 
 }
-
+function handleCheckout(){
+    window.location.replace("shopping-cart.html");
+}
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
     // Populates the movie list!
@@ -114,7 +114,7 @@ function handleStarResult(resultData) {
             + resultStar[2]["starname"] +
             "</th>";
         rowHTML+= "<td>";
-        rowHTML+= "<button type='button' onclick='handleAddCart(this.value)' value=" + resultData[i]["movie_title"].split(" ").join(",,,")  +">" + "Click me </button>";
+        rowHTML+= "<button type='button' onclick='handleAddCart(this.value)' value=" + resultData[i]["movie_title"].split(" ").join(",,,")  +">" + "Add to Cart </button>";
         rowHTML+="</td>";
         rowHTML += "</tr>";
 

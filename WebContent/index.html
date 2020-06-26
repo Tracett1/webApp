@@ -21,8 +21,18 @@
 </head>
 <body>
 
+<div class="row">
+    <div class="col">
+        <h1>Movies List</h1>
+    </div>
+    <div class="column">
+        <div class="float-right">
+        <button style= "background-color:  #E0FFFF; color: #191970" type="button" class="btn btn-primary btn-sm" onclick="handleCheckout()"> Checkout! >>
+        </button>
+        </div>
+    </div>
 
-<h1>Movies</h1>
+</div>
 <div class="container">
     <p>Sort Moves by Rating or Title:</p>
     <ul class="nav" id="sorting_nav_body">
@@ -60,6 +70,7 @@
     <div class = "col-4">
         <div>
             <p>Select # displayed per page: </p>
+
             <form>
                 <select id="limit_per_page">
                     <option value="10">10</option>
