@@ -21,8 +21,22 @@ function getTotalPrice(){
 
 }
 function handlePaymentSub(resultData){
-    console.log(resultData["errorMessage"]);
-    console.log("TO SERVER SUCCESSFUL");
+    if (resultData["status"] == "success"){
+        //go to confirmation page
+        // save into session: ccId, saleDate, all other movies are saved into session
+        sessionStorage.setItem("ccNumber", resultData["ccId"]);
+        sessionStorage.setItem("saleDate", resultData["saleDate"]);
+        sessionStorage.setItem("customer_id", resultData["customer_id"]);
+
+        // console.log(JSON.parse(sessionStorage.getItem("movieids")));
+        // console.log(resultData["ccId"]);
+        // console.log(resultData["saleDate"]);
+        window.location.replace("confirmation-page.html");
+    }
+    else{
+        console.log(resultData["status"]);
+        document.getElementById("payment_error_message").innerHTML = resultData["message"];
+    }
 }
 function submitCCForm(formSubmit){
     formSubmit.preventDefault();

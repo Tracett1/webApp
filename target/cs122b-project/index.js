@@ -56,18 +56,25 @@ function getPrevNextIndex(pageParam, value){
 function handleAddCart(value){
     if (sessionStorage.getItem("cart") == null){
         sessionStorage.setItem("cart", "{}");
+        sessionStorage.setItem("movieids", "{}");
     }
-    var newval = value.split(",,,").join(" ");
+    var val = value.substring(9);
+    var newval = val.split(",,,").join(" ");
+    var movieId = value.substring(0, 9);
 
     var updateCart = JSON.parse(sessionStorage.getItem("cart"));
+    var updateMovieID = JSON.parse(sessionStorage.getItem("movieids"));
     if (updateCart.hasOwnProperty(newval)){
         updateCart[newval] +=1;
+        updateMovieID[newval] = movieId;
     }
     else{
         updateCart[newval] = 1;
+        updateMovieID[newval] = movieId;
     }
     var cartSize = Object.keys(updateCart).length;
     sessionStorage.setItem("cart", JSON.stringify(updateCart));
+    sessionStorage.setItem("movieids", JSON.stringify(updateMovieID));
     alert("'"+ newval + "'" + " added to cart!. You have " + cartSize.toString() + " movies in your cart.");
 
 
@@ -77,6 +84,7 @@ function handleCheckout(){
 }
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
+    console.log(resultData[0]);
     // Populates the movie list!
     document.getElementById("limit_per_page").value = numRecords;
     // Displays current page #
@@ -84,7 +92,7 @@ function handleStarResult(resultData) {
     let starTableBodyElement = jQuery("#star_table_body");
     for (let i = 0; i < resultData.length; i++) {
         var resultStar = JSON.parse(resultData[i]["movie_stars"]);
-        var resultGenre = resultData[i]["movie_genre"].split(",,,");
+        var resultGenre = resultData[i]["movie_genre"].split(",");
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML +=
@@ -114,7 +122,7 @@ function handleStarResult(resultData) {
             + resultStar[2]["starname"] +
             "</th>";
         rowHTML+= "<td>";
-        rowHTML+= "<button type='button' onclick='handleAddCart(this.value)' value=" + resultData[i]["movie_title"].split(" ").join(",,,")  +">" + "Add to Cart </button>";
+        rowHTML+= "<button type='button' onclick='handleAddCart(this.value)' value=" + resultData[i]["movie_id"] + resultData[i]["movie_title"].split(" ").join(",,,")  +">" + "Add to Cart </button>";
         rowHTML+="</td>";
         rowHTML += "</tr>";
 

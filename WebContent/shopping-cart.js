@@ -1,7 +1,5 @@
 var jsonCart = JSON.parse(sessionStorage.getItem("cart"));
 function handleQuantity(quantity, index){
-    console.log("this is index");
-    console.log(index);
     jsonCart[index] = parseInt(quantity);
     sessionStorage.setItem("cart", JSON.stringify(jsonCart));
     console.log(JSON.parse(sessionStorage.getItem("cart")));

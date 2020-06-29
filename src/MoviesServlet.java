@@ -33,8 +33,6 @@ public class MoviesServlet extends HttpServlet {
         //SAVING SESSION URL
         HttpSession session = request.getSession();
         String Uri = "?" + request.getQueryString();
-        System.out.println("this is uri");
-        System.out.println(Uri);
         session.setAttribute("savedMoviePage", Uri);
 
 
@@ -198,13 +196,7 @@ public class MoviesServlet extends HttpServlet {
                 String movie_director = rs.getString("director");
                 String movie_rating = rs.getString("rating");
                 String movie_genre = rs.getString("genrename");
-                //String[] movie_stars = rs.getString("starsname").split(",");
-//                String[] movie_starsid = rs.getString("starsid").split(",");
-//
-//                List<starsObj> starsObjList = new ArrayList<>();
-//                for (int i = 0; i < 3 ; i++) {
-//                    starsObjList.add(new starsObj(movie_stars[i], movie_starsid[i]));
-//                }
+
 
                 Gson gson = new Gson();
                 String star_json = gson.toJson(starsObjList);
