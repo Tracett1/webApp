@@ -13,9 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
-import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @WebServlet(name = "ConfirmationServlet", urlPatterns = "/api/conf")
 public class ConfirmationServlet extends HttpServlet {
@@ -36,10 +33,6 @@ public class ConfirmationServlet extends HttpServlet {
             movie_map = gson.fromJson(ok, Map.class);
 
         }
-//        for (String entry : movie_map.keySet()){
-//            String value = movie_map.get(entry);
-//            System.out.println(value);
-//        }
 
         try{
             Connection dbcon = dataSource.getConnection();
@@ -62,18 +55,16 @@ public class ConfirmationServlet extends HttpServlet {
             }
             int [] count = statement.executeBatch();
             dbcon.commit();
-
-
-
-
             JsonObject json = new JsonObject();
+            if (count.length == movie_map.size()){
+                json.addProperty("status", "success");
+            }
+            else{
+                json.addProperty("status","fail");
+            }
+
             out.write(json.toString());
-            // write JSON string to output
-//            System.out.println(jsonObj.toString());
-//            out.write(jsonObj.toString());
-            // set response status to 200 (OK)
             response.setStatus(200);
-            //rs.close();
             statement.close();
             dbcon.close();
 

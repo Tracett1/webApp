@@ -3,7 +3,7 @@ function createDataToSend(){
     var movieToId = JSON.parse(sessionStorage.getItem("movieids"));
     var obj = '{}';
     var jsonObj = JSON.parse(obj);
-
+    /// sending a dictionary of {movieId : quantity} over to server
     for (each in movieToQuantity){
         var movieId = movieToId[each].toString();
         var quantity = movieToQuantity[each].toString();
@@ -13,12 +13,10 @@ function createDataToSend(){
 }
 
 function handleSaleSub(){
-    console.log("heyyyyyy it worked");
+    sessionStorage.clear();
+    console.log("TRANSACTION PROCESSED");
 }
 var obj = createDataToSend();
-var param = JSON.parse('{}');
-param["param"] = obj;
-console.log(param);
 
 $.ajax(
     "api/conf",{

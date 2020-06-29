@@ -24,17 +24,32 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         PrintWriter out = response.getWriter();
+
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+        JsonObject responseJsonObject = new JsonObject();
+
+        // Verify reCAPTCHA
+        try {
+            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+        } catch (Exception e) {
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", e.getMessage());
+            out.write(responseJsonObject.toString());
+            out.close();
+            response.setStatus(500);
+            return;
+        }
+
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        JsonObject responseJsonObject = new JsonObject();
         try {
             Connection dbcon = dataSource.getConnection();
             String query = "SELECT id, email, password from customers where email = ? and password = ?";
 
             PreparedStatement statement = dbcon.prepareStatement(query);
 
-            //out.println(username);
-            //out.println(password);
 
             statement.setString(1,username);
             statement.setString(2, password);
