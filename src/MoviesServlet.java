@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.sql.PreparedStatement;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -130,10 +131,6 @@ public class MoviesServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
-
-
             String query = "SELECT g.*, ratings.rating FROM" +
                     "( SELECT movies.*, group_concat(DISTINCT genres.name) as genrename, group_concat(DISTINCT stars.name) as starsname, group_concat(DISTINCT stars.id) as starsid FROM movies " +
                     "JOIN genres_in_movies ON genres_in_movies.movieId = movies.id " +
@@ -143,13 +140,15 @@ public class MoviesServlet extends HttpServlet {
                     "GROUP BY(movies.id) ) AS g " +
                     "JOIN ratings ON ratings.movieId = g.id " + add_to_query + sortBy + " " + order +
                     adding_opposite_sort +
-                    " LIMIT " + queryLimit + " OFFSET " + queryOffset;
-            System.out.println("SQL QUERY BEING SENT: " + query);
+                    " LIMIT " + "?" + " OFFSET " + "?";
+
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            statement.setInt(1,Integer.parseInt(queryLimit));
+            statement.setInt(2, Integer.parseInt(queryOffset));
 
 
-            // Perform the query
-            ResultSet rs = statement.executeQuery(query);
 
+            ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
             // Iterate through each row of rs
@@ -235,9 +234,5 @@ public class MoviesServlet extends HttpServlet {
         out.close();
 
     }
-
-
-
-
 
 }

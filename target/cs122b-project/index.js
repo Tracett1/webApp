@@ -84,7 +84,6 @@ function handleCheckout(){
 }
 function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
-    console.log(resultData[0]);
     // Populates the movie list!
     document.getElementById("limit_per_page").value = numRecords;
     // Displays current page #
