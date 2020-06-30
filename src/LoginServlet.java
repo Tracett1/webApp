@@ -1,5 +1,7 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 import javax.annotation.Resource;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -46,25 +48,28 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         try {
             Connection dbcon = dataSource.getConnection();
-            String query = "SELECT id, email, password from customers where email = ? and password = ?";
+            String query = "SELECT id, email, password from customers where email = ?";
 
             PreparedStatement statement = dbcon.prepareStatement(query);
 
 
             statement.setString(1,username);
-            statement.setString(2, password);
+//            statement.setString(2, password);
             ResultSet rs = statement.executeQuery();
             int count = 0;
+            boolean success = false;
+            StrongPasswordEncryptor enc = new StrongPasswordEncryptor();
             while (rs.next()){
                 count++;
+                String encryptedPassword = rs.getString("password");
+                success = enc.checkPassword(password,encryptedPassword);
+
             }
-            if (count < 1){
+            if (count < 1 || success == false){
                 responseJsonObject.addProperty("status", "fail");
                 responseJsonObject.addProperty("message", "Username or Password Incorrect");
             }
             else { //if login successful
-               //  String userEmail = rs.getString("email");
-               // String userPW = rs.getString("password");
                 // Create a user for the session
                 request.getSession().setAttribute("user", new User(username));
                 responseJsonObject.addProperty("status", "success");
