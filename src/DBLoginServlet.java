@@ -1,7 +1,5 @@
 import com.google.gson.JsonObject;
-import com.sun.deploy.net.HttpRequest;
 import org.jasypt.util.password.StrongPasswordEncryptor;
-
 import javax.annotation.Resource;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
