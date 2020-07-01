@@ -10,7 +10,7 @@ https://youtu.be/4JEOfqiLuTA
 
 
 #### Regrades:
-- Project 1 https://youtu.be/HY6hY4UfBHY
+- Project 1 (retake w/ git log and git clone) https://youtu.be/IVb61QKpMqc
 - Project 2
 - Project 3
 
