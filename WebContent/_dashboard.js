@@ -22,7 +22,7 @@ function handleMetaData(resultData){
 
 $.ajax(
     "api/dashboard", {
-        method: "GET",
+        method: "POST",
         // Serialize the login form to the data sent by POST request
         // serialize will convert the values in the form into a byte array
         success: handleMetaData
