@@ -1,4 +1,5 @@
 let metatable = document.getElementById("meta_table_body");
+let starForm = $("#star_form");
 function handleMetaData(resultData){
     for (let i = 0; i < resultData.length; i++){
         var row = document.createElement("tr");
@@ -19,7 +20,22 @@ function handleMetaData(resultData){
         metatable.appendChild(row);
     }
 }
+function handleStarServer(resultData){
+    console.log("submitted!!!");
+}
+function handleSubmitStar(formSubmit){
+    formSubmit.preventDefault();
+    var pass_url = "api/dashboard?" + starForm.serialize();
+    $.ajax(
+        "api/dashboard", {
+            method: "GET",
+            url: pass_url,
+            success: handleStarServer
+        }
+    );
 
+
+}
 $.ajax(
     "api/dashboard", {
         method: "POST",
@@ -28,3 +44,5 @@ $.ajax(
         success: handleMetaData
     }
 );
+
+starForm.submit(handleSubmitStar());

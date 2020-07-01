@@ -65,8 +65,6 @@ public class DashboardServlet extends HttpServlet {
             System.out.println(responseJsonArr.toString());
             out.write(responseJsonArr.toString());
 
-//            rs.close();
-//            statement.close();
             dbcon.close();
 
         }
@@ -81,4 +79,44 @@ public class DashboardServlet extends HttpServlet {
         out.close();
 
     }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+
+        String starName = request.getParameter("starname");
+        String birthYear = request.getParameter("year");
+        JsonObject Jsonresponse = new JsonObject();
+        try {
+            Connection dbcon = dataSource.getConnection();
+
+            String query = "CALL add_star(?,?)";
+            PreparedStatement statement = dbcon.prepareStatement(query);
+
+            statement.setString(1, starName);
+            statement.setString(2,birthYear);
+            int rs = statement.executeUpdate();
+            if (rs != 0){
+                Jsonresponse.addProperty("status","success");
+            }
+            out.write(Jsonresponse.toString());
+
+
+
+            dbcon.close();
+            response.setStatus(200);
+
+
+        } catch (Exception e) {
+            Jsonresponse.addProperty("status","fail");
+            Jsonresponse.addProperty("message", e.getMessage());
+            response.setStatus(500);
+
+        }
+
+        out.close();
+
+
+    }
 }
+
