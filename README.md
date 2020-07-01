@@ -1,5 +1,32 @@
+### Please Regrade: 
+Project 1, Project 2 & Project 3 
+
+
+
+
+
 ### Demo URL: 
 https://youtu.be/4JEOfqiLuTA
+
+
+#### Regrades:
+- Project 1 (retake w/ git log and git clone) https://youtu.be/IVb61QKpMqc
+- Project 2
+- Project 3
+
+### Queries w/ Prepared Statements 
+- Confirmation servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/ConfirmationServlet.java
+- Dashboard servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/DashboardServlet.java
+- DB Login servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/DBLoginServlet.java
+- Login servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/LoginServlet.java
+- Main servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/MainServlet.java
+- Movies servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/MoviesServlet.java
+- Payment servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/PaymentServlet.java
+- Single Movie servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/SingleMovieServlet.java
+- Single Star servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/SingleStarServlet.java
+
+
+
 ### Deployment Instructions: 
 1. Clone this repository using `git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182.git`
 2. Open IntelliJ -> Import Project -> Choose the project you just cloned (The root path must contain the pom.xml!) -> Choose Import project from external model -> choose Maven -> Click on Finish -> The IntelliJ will load automatically
