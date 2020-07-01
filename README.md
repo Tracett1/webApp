@@ -9,10 +9,10 @@ Project 1, Project 2 & Project 3
 https://youtu.be/4JEOfqiLuTA
 
 
-Regrades:
-Project 1 https://youtu.be/HY6hY4UfBHY
-Project 2
-Project 3
+#### Regrades:
+- Project 1 https://youtu.be/HY6hY4UfBHY
+- Project 2
+- Project 3
 
 ### Queries w/ Prepared Statements 
 - Confirmation servlet https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-182/blob/master/src/ConfirmationServlet.java
